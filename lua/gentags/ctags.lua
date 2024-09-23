@@ -3,10 +3,14 @@ local M = {}
 
 M.generate = function(cfg, lang, tag_file, filepath)
   local args = {
-    "--languages=" .. lang,
     "-f",
     tag_file:expand(),
   }
+
+  if not cfg.has_options then
+    table.insert(args, 1, "--languages=" .. lang)
+  end
+
   for _, v in ipairs(cfg.args) do
     table.insert(args, v)
   end
