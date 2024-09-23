@@ -103,6 +103,9 @@ M.disable = function()
   end
 end
 
+local options_flag = "--options"
+local options_flag_size = #options_flag
+
 M.setup = function(args)
   if args == nil then
     args = {}
@@ -112,6 +115,15 @@ M.setup = function(args)
   local root_path = Path:new(config.root_dir)
   config.root_dir = root_path
   Path:new(config.cache.path):mkdir({ exists_ok = true })
+
+  if args.args ~= nil then
+    for _, option in ipairs(args.args) do
+      if option:sub(1, options_flag_size) == options_flag then
+        config.has_options = true
+        break
+      end
+    end
+  end
 
   for lang_name, _ in pairs(config.lang_ft_map) do
     local tag_file = lang_name:gsub(",", "_") .. root_path:shorten():gsub(root_path._sep, "_"):gsub("%.", "")
